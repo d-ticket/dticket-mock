@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>d ticket</title>
+<style>
+body {
+margin:0;
+font-family:-apple-system, BlinkMacSystemFont;
+background:linear-gradient(#051126,#173f83);
+color:white;
+}
+.header{
+background:#15c7c7;
+padding:14px;
+text-align:center;
+font-weight:bold;
+}
+.ticket{
+margin:40px auto;
+width:280px;
+background:black;
+padding:16px;
+border-radius:10px;
+}
+.qr{
+width:180px;
+height:180px;
+background:white;
+margin:0 auto 10px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+.qr svg{
+width:140px;
+height:140px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">マイチケット</div>
+
+<div class="ticket">
+
+<div class="qr">
+<svg viewBox="0 0 21 21">
+<rect width="21" height="21" fill="white"/>
+<rect x="0" y="0" width="7" height="7" fill="black"/>
+<rect x="14" y="0" width="7" height="7" fill="black"/>
+<rect x="0" y="14" width="7" height="7" fill="black"/>
+</svg>
+</div>
+
+<div>4/4(土)</div>
+<div>MUFG STADIUM（国立競技場）</div>
+
+</div>
+
+</body>
+</html>
