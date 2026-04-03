@@ -14,7 +14,9 @@
       --strip: #f2f2f2;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     html, body {
       margin: 0;
@@ -72,7 +74,7 @@
     }
 
     .ticket-top {
-      height: 118px;
+      height: 132px;
       position: relative;
       background:
         radial-gradient(circle at 14% 32%, rgba(44,79,219,.92), transparent 22%),
@@ -97,6 +99,7 @@
       font-size: 18px;
       font-weight: 700;
       line-height: 1;
+      z-index: 4;
     }
 
     .qr-panel {
@@ -107,33 +110,53 @@
       height: 110px;
       background: #f3f3f3;
       border-radius: 3px 3px 0 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       overflow: hidden;
       box-shadow: 0 0 0 1px rgba(255,255,255,.14);
+      z-index: 3;
     }
 
     .qr-svg {
+      position: absolute;
+      left: 8px;
+      top: 6px;
       width: 92px;
       height: 92px;
       display: block;
       shape-rendering: crispEdges;
-      margin-top: -6px;
+      z-index: 1;
+    }
+
+    .qr-time {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 24px;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      font-variant-numeric: tabular-nums;
+      z-index: 2;
     }
 
     .warning {
       position: absolute;
-      right: 7px;
+      right: 8px;
       top: 46px;
-      width: 112px;
-      min-height: 58px;
+      width: 104px;
+      min-height: 56px;
       padding: 6px 7px 5px;
-      background: rgba(0,0,0,.5);
+      background: rgba(0,0,0,.58);
       font-size: 8px;
       line-height: 1.34;
       font-weight: 700;
       letter-spacing: .01em;
+      z-index: 1;
     }
 
     .name-strip {
@@ -146,7 +169,6 @@
       padding: 0 10px;
       font-size: 10px;
       font-weight: 500;
-      margin-top: 12px;
     }
 
     .ticket-body {
@@ -238,7 +260,6 @@
       line-height: 1.02;
       font-weight: 900;
       letter-spacing: -.02em;
-      text-transform: none;
     }
 
     .meta {
@@ -255,20 +276,6 @@
     .meta .value {
       font-weight: 700;
     }
-
-    .pager {
-      display: none;
-    }
-
-    .pager-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.45);
-      box-shadow: 0 0 0 1px rgba(255,255,255,.08);
-    }
-
-    .pager-dot.active { background: #fff; }
 
     .footer-pill {
       margin-top: 28px;
@@ -300,11 +307,25 @@
     }
 
     @media (max-width: 390px) {
-      .header { height: 60px; }
-      .header-title { font-size: 18px; }
-      .content { padding-top: 48px; }
-      .ticket { width: min(74vw, 280px); }
-      .footer-pill { width: min(90vw, 320px); }
+      .header {
+        height: 60px;
+      }
+
+      .header-title {
+        font-size: 18px;
+      }
+
+      .content {
+        padding-top: 48px;
+      }
+
+      .ticket {
+        width: min(74vw, 280px);
+      }
+
+      .footer-pill {
+        width: min(90vw, 320px);
+      }
     }
   </style>
 </head>
@@ -363,7 +384,6 @@
                 <rect x="15" y="5" width="1" height="1"/>
                 <rect x="16" y="5" width="1" height="1"/>
                 <rect x="19" y="5" width="1" height="1"/>
-
                 <rect x="8" y="8" width="1" height="1"/>
                 <rect x="9" y="8" width="1" height="1"/>
                 <rect x="11" y="8" width="1" height="1"/>
@@ -376,7 +396,6 @@
                 <rect x="24" y="8" width="1" height="1"/>
                 <rect x="25" y="8" width="1" height="1"/>
                 <rect x="27" y="8" width="1" height="1"/>
-
                 <rect x="9" y="9" width="1" height="1"/>
                 <rect x="10" y="9" width="1" height="1"/>
                 <rect x="12" y="9" width="1" height="1"/>
@@ -387,7 +406,6 @@
                 <rect x="23" y="9" width="1" height="1"/>
                 <rect x="25" y="9" width="1" height="1"/>
                 <rect x="27" y="9" width="1" height="1"/>
-
                 <rect x="8" y="10" width="1" height="1"/>
                 <rect x="11" y="10" width="1" height="1"/>
                 <rect x="13" y="10" width="1" height="1"/>
@@ -398,7 +416,6 @@
                 <rect x="22" y="10" width="1" height="1"/>
                 <rect x="24" y="10" width="1" height="1"/>
                 <rect x="26" y="10" width="1" height="1"/>
-
                 <rect x="9" y="11" width="1" height="1"/>
                 <rect x="10" y="11" width="1" height="1"/>
                 <rect x="12" y="11" width="1" height="1"/>
@@ -409,7 +426,6 @@
                 <rect x="22" y="11" width="1" height="1"/>
                 <rect x="25" y="11" width="1" height="1"/>
                 <rect x="27" y="11" width="1" height="1"/>
-
                 <rect x="8" y="12" width="1" height="1"/>
                 <rect x="10" y="12" width="1" height="1"/>
                 <rect x="11" y="12" width="1" height="1"/>
@@ -420,7 +436,6 @@
                 <rect x="23" y="12" width="1" height="1"/>
                 <rect x="24" y="12" width="1" height="1"/>
                 <rect x="26" y="12" width="1" height="1"/>
-
                 <rect x="9" y="13" width="1" height="1"/>
                 <rect x="12" y="13" width="1" height="1"/>
                 <rect x="14" y="13" width="1" height="1"/>
@@ -431,7 +446,6 @@
                 <rect x="24" y="13" width="1" height="1"/>
                 <rect x="25" y="13" width="1" height="1"/>
                 <rect x="27" y="13" width="1" height="1"/>
-
                 <rect x="8" y="14" width="1" height="1"/>
                 <rect x="10" y="14" width="1" height="1"/>
                 <rect x="11" y="14" width="1" height="1"/>
@@ -442,7 +456,6 @@
                 <rect x="21" y="14" width="1" height="1"/>
                 <rect x="23" y="14" width="1" height="1"/>
                 <rect x="26" y="14" width="1" height="1"/>
-
                 <rect x="9" y="15" width="1" height="1"/>
                 <rect x="12" y="15" width="1" height="1"/>
                 <rect x="14" y="15" width="1" height="1"/>
@@ -453,7 +466,6 @@
                 <rect x="24" y="15" width="1" height="1"/>
                 <rect x="25" y="15" width="1" height="1"/>
                 <rect x="27" y="15" width="1" height="1"/>
-
                 <rect x="8" y="16" width="1" height="1"/>
                 <rect x="10" y="16" width="1" height="1"/>
                 <rect x="11" y="16" width="1" height="1"/>
@@ -465,7 +477,6 @@
                 <rect x="22" y="16" width="1" height="1"/>
                 <rect x="24" y="16" width="1" height="1"/>
                 <rect x="26" y="16" width="1" height="1"/>
-
                 <rect x="9" y="17" width="1" height="1"/>
                 <rect x="12" y="17" width="1" height="1"/>
                 <rect x="14" y="17" width="1" height="1"/>
@@ -475,7 +486,6 @@
                 <rect x="23" y="17" width="1" height="1"/>
                 <rect x="25" y="17" width="1" height="1"/>
                 <rect x="27" y="17" width="1" height="1"/>
-
                 <rect x="8" y="18" width="1" height="1"/>
                 <rect x="10" y="18" width="1" height="1"/>
                 <rect x="11" y="18" width="1" height="1"/>
@@ -486,7 +496,6 @@
                 <rect x="21" y="18" width="1" height="1"/>
                 <rect x="24" y="18" width="1" height="1"/>
                 <rect x="26" y="18" width="1" height="1"/>
-
                 <rect x="9" y="19" width="1" height="1"/>
                 <rect x="12" y="19" width="1" height="1"/>
                 <rect x="14" y="19" width="1" height="1"/>
@@ -496,7 +505,6 @@
                 <rect x="22" y="19" width="1" height="1"/>
                 <rect x="25" y="19" width="1" height="1"/>
                 <rect x="27" y="19" width="1" height="1"/>
-
                 <rect x="8" y="20" width="1" height="1"/>
                 <rect x="10" y="20" width="1" height="1"/>
                 <rect x="11" y="20" width="1" height="1"/>
@@ -509,8 +517,8 @@
                 <rect x="24" y="20" width="1" height="1"/>
                 <rect x="26" y="20" width="1" height="1"/>
               </g>
-              <rect x="0" y="23.6" width="29" height="5.4" fill="#000"/>
             </svg>
+            <div class="qr-time" id="qrTime">15:30:00</div>
           </div>
 
           <div class="warning">【特定チケット】<br>無断有償譲渡禁止<br>本券は購入者の氏名・<br>連絡先を確認の上販売<br>されています。</div>
@@ -540,15 +548,41 @@
         </div>
       </section>
 
-      
-        <div class="pager-dot"></div>
-      </div>
-
       <div class="footer-pill">
         <span>お客さまご利用端末からの情報の外部送信について</span>
         <span class="gear">⚙</span>
       </div>
     </main>
   </div>
+
+  <script>
+    (function () {
+      function pad(n) {
+        return String(n).padStart(2, "0");
+      }
+
+      function updateCountdown() {
+        const now = new Date();
+        const target = new Date(now);
+        target.setHours(15, 30, 0, 0);
+
+        let diff = target.getTime() - now.getTime();
+        if (diff < 0) diff = 0;
+
+        const totalSeconds = Math.floor(diff / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        const el = document.getElementById("qrTime");
+        if (el) {
+          el.textContent = pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
+        }
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    })();
+  </script>
 </body>
 </html>
