@@ -1,264 +1,588 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>マイチケット</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>マイチケット</title>
+  <style>
+    :root {
+      --teal: #21c7c8;
+      --bg-top: #04112a;
+      --bg-mid: #082259;
+      --bg-bottom: #1c478d;
+      --ticket-border: rgba(255,255,255,0.38);
+      --strip: #f2f2f2;
+    }
 
-<style>
-body{
-margin:0;
-font-family:sans-serif;
-background:linear-gradient(#03112b,#1c478d);
-color:#fff;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-/* ===== HEADER ===== */
-.header{
-background:#1fc6c7;
-height:60px;
-display:flex;
-align-items:center;
-justify-content:center;
-position:relative;
-font-weight:bold;
-}
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
 
-.menu-btn{
-position:absolute;
-left:10px;
-top:10px;
-cursor:pointer;
-}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      color: #fff;
+      background:
+        radial-gradient(circle at 18% 31%, rgba(42,89,210,.36), transparent 22%),
+        radial-gradient(circle at 75% 68%, rgba(35,108,255,.22), transparent 18%),
+        radial-gradient(circle at 46% 56%, rgba(7,29,86,.38), transparent 27%),
+        linear-gradient(180deg, var(--bg-top) 0%, #061633 18%, var(--bg-mid) 58%, var(--bg-bottom) 100%);
+    }
 
-.menu-btn div{
-width:25px;
-height:3px;
-background:#fff;
-margin:5px 0;
-}
+    .app {
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-/* ===== MENU ===== */
-.menu{
-position:fixed;
-top:0;
-left:-260px;
-width:260px;
-height:100%;
-background:#f5f5f5;
-color:#000;
-transition:0.3s;
-z-index:1000;
-padding:20px;
-}
+    .header {
+      height: 80px;
+      background: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,.14);
+    }
 
-.menu.open{
-left:0;
-}
+    .header-title {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: .02em;
+      text-shadow: 0 1px 0 rgba(255,255,255,.06);
+    }
 
-.menu h3{
-margin-top:0;
-}
+    .content {
+      padding: 70px 0 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-.menu-item{
-padding:15px 0;
-border-bottom:1px solid #ddd;
-font-weight:bold;
-}
+    .ticket {
+      width: min(78vw, 282px);
+      background: #000;
+      border: 1px solid var(--ticket-border);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(0,0,0,.28);
+    }
 
-/* ===== TICKET ===== */
-.ticket{
-width:260px;
-margin:40px auto;
-background:#000;
-border-radius:6px;
-overflow:hidden;
-box-shadow:0 10px 25px rgba(0,0,0,0.4);
-}
+    .ticket-top {
+      height: 132px;
+      position: relative;
+      background:
+        radial-gradient(circle at 14% 32%, rgba(44,79,219,.92), transparent 22%),
+        radial-gradient(circle at 31% 66%, rgba(36,182,196,.38), transparent 20%),
+        radial-gradient(circle at 78% 16%, rgba(90,229,255,.52), transparent 15%),
+        radial-gradient(circle at 82% 58%, rgba(22,107,154,.5), transparent 20%),
+        linear-gradient(135deg, #071748 2%, #173890 24%, #0a1f57 46%, #0f3567 67%, #0a203f 100%);
+    }
 
-.ticket-top{
-height:120px;
-position:relative;
-background:linear-gradient(135deg,#0a1f57,#173890);
-}
+    .info-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 2px solid rgba(255,255,255,.92);
+      background: rgba(110,198,255,.18);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1;
+      z-index: 4;
+    }
 
-/* QR */
-.qr{
-position:absolute;
-left:20px;
-top:20px;
-width:90px;
-height:90px;
-background:#fff;
-display:flex;
-align-items:center;
-justify-content:center;
-}
+    .qr-panel {
+      position: absolute;
+      left: 86px;
+      top: 12px;
+      width: 108px;
+      height: 110px;
+      background: #f3f3f3;
+      border-radius: 3px 3px 0 0;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.14);
+      z-index: 3;
+    }
 
-.qr img{
-width:100%;
-height:100%;
-object-fit:cover;
-image-rendering:pixelated;
-}
+    .qr-svg {
+      position: absolute;
+      left: 8px;
+      top: 6px;
+      width: 92px;
+      height: 92px;
+      display: block;
+      shape-rendering: crispEdges;
+      z-index: 1;
+    }
 
-/* QR TIME */
-.qr-time{
-position:absolute;
-bottom:0;
-left:0;
-right:0;
-background:#000;
-color:#fff;
-font-size:10px;
-text-align:center;
-padding:3px;
-}
+    .qr-time {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 24px;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      font-variant-numeric: tabular-nums;
+      z-index: 2;
+    }
 
-/* WARNING */
-.warning{
-position:absolute;
-right:10px;
-top:20px;
-width:130px;
-font-size:10px;
-background:rgba(0,0,0,0.6);
-padding:6px;
-line-height:1.4;
-}
+    .warning {
+      position: absolute;
+      right: 8px;
+      top: 46px;
+      width: 104px;
+      min-height: 56px;
+      padding: 6px 7px 5px;
+      background: rgba(0,0,0,.58);
+      font-size: 8px;
+      line-height: 1.34;
+      font-weight: 700;
+      letter-spacing: .01em;
+      z-index: 1;
+    }
 
-/* BODY */
-.body{
-padding:12px;
-}
+    .name-strip {
+      height: 20px;
+      background: var(--strip);
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 10px;
+      font-size: 10px;
+      font-weight: 500;
+    }
 
-.title{
-font-size:12px;
-font-weight:bold;
-margin-top:8px;
-}
+    .ticket-body {
+      min-height: 422px;
+      padding: 12px 12px 18px;
+    }
 
-/* SHARE BUTTON */
-.share{
-margin:20px auto;
-display:block;
-width:180px;
-background:#df003c;
-border:none;
-color:#fff;
-padding:12px;
-border-radius:30px;
-font-weight:bold;
-}
+    .head {
+      display: grid;
+      grid-template-columns: 1fr 50px;
+      gap: 9px;
+      align-items: start;
+    }
 
-/* ===== MENU OVERLAY ===== */
-.overlay{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.3);
-display:none;
-z-index:900;
-}
+    .date {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: .98;
+      letter-spacing: -.01em;
+      margin-bottom: 2px;
+    }
 
-.overlay.show{
-display:block;
-}
-</style>
+    .date .main {
+      font-size: 27px;
+      letter-spacing: -.03em;
+      margin-right: 2px;
+    }
+
+    .venue, .time, .sub {
+      font-size: 11px;
+      line-height: 1.12;
+      font-weight: 700;
+    }
+
+    .sub {
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .logo {
+      width: 47px;
+      height: 47px;
+      position: relative;
+      background: #ea164d;
+      overflow: hidden;
+      margin-top: 2px;
+    }
+
+    .logo::before,
+    .logo::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      opacity: .95;
+      transform: rotate(12deg);
+    }
+
+    .logo::before {
+      width: 46px;
+      height: 46px;
+      left: 20px;
+      top: -8px;
+    }
+
+    .logo::after {
+      width: 61px;
+      height: 61px;
+      left: 8px;
+      top: 16px;
+      border-width: 5px;
+    }
+
+    .logo-text {
+      position: absolute;
+      inset: 5px 4px auto 5px;
+      z-index: 1;
+      color: #111;
+      font-size: 7px;
+      line-height: 1.03;
+      font-weight: 900;
+      letter-spacing: -.01em;
+    }
+
+    .title {
+      margin-top: 5px;
+      max-width: 220px;
+      font-size: 11px;
+      line-height: 1.02;
+      font-weight: 900;
+      letter-spacing: -.02em;
+    }
+
+    .meta {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      column-gap: 10px;
+      row-gap: 3px;
+      font-size: 10px;
+      line-height: 1.18;
+    }
+
+    .meta .label,
+    .meta .value {
+      font-weight: 700;
+    }
+
+    .footer-pill {
+      margin-top: 28px;
+      width: min(86vw, 320px);
+      min-height: 34px;
+      background: #fff;
+      border-radius: 999px;
+      color: #222;
+      padding: 4px 10px 4px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 5px 12px rgba(0,0,0,.18);
+      font-size: 11px;
+    }
+
+    .gear {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 390px) {
+      .header {
+        height: 60px;
+      }
+
+      .header-title {
+        font-size: 18px;
+      }
+
+      .content {
+        padding-top: 48px;
+      }
+
+      .ticket {
+        width: min(74vw, 280px);
+      }
+
+      .footer-pill {
+        width: min(90vw, 320px);
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="app">
+    <header class="header">
+      <div class="header-title">マイチケット</div>
+    </header>
 
-<!-- MENU -->
-<div class="menu" id="menu">
-<h3>夏目 敏之 さん</h3>
+    <main class="content">
+      <section class="ticket" aria-label="チケット">
+        <div class="ticket-top">
+          <div class="info-badge">i</div>
 
-<div class="menu-item">アカウント設定</div>
-<div class="menu-item">マイチケット</div>
-<div class="menu-item">お知らせ</div>
-<div class="menu-item">リセール</div>
-<div class="menu-item">抽選履歴</div>
-<div class="menu-item">クーポン</div>
-<div class="menu-item">使い方ガイド</div>
+          <div class="qr-panel" aria-label="QRコード">
+            <svg class="qr-svg" viewBox="0 0 29 29" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR">
+              <rect width="29" height="29" fill="#fff"/>
+              <rect x="0" y="0" width="7" height="7" fill="#000"/>
+              <rect x="1" y="1" width="5" height="5" fill="#fff"/>
+              <rect x="2" y="2" width="3" height="3" fill="#000"/>
+              <rect x="22" y="0" width="7" height="7" fill="#000"/>
+              <rect x="23" y="1" width="5" height="5" fill="#fff"/>
+              <rect x="24" y="2" width="3" height="3" fill="#000"/>
+              <rect x="0" y="22" width="7" height="7" fill="#000"/>
+              <rect x="1" y="23" width="5" height="5" fill="#fff"/>
+              <rect x="2" y="24" width="3" height="3" fill="#000"/>
+              <g fill="#000">
+                <rect x="9" y="1" width="1" height="1"/>
+                <rect x="10" y="1" width="1" height="1"/>
+                <rect x="12" y="1" width="1" height="1"/>
+                <rect x="13" y="1" width="1" height="1"/>
+                <rect x="15" y="1" width="1" height="1"/>
+                <rect x="17" y="1" width="1" height="1"/>
+                <rect x="18" y="1" width="1" height="1"/>
+                <rect x="9" y="2" width="1" height="1"/>
+                <rect x="11" y="2" width="1" height="1"/>
+                <rect x="13" y="2" width="1" height="1"/>
+                <rect x="14" y="2" width="1" height="1"/>
+                <rect x="16" y="2" width="1" height="1"/>
+                <rect x="18" y="2" width="1" height="1"/>
+                <rect x="8" y="3" width="1" height="1"/>
+                <rect x="10" y="3" width="1" height="1"/>
+                <rect x="12" y="3" width="1" height="1"/>
+                <rect x="15" y="3" width="1" height="1"/>
+                <rect x="17" y="3" width="1" height="1"/>
+                <rect x="19" y="3" width="1" height="1"/>
+                <rect x="9" y="4" width="1" height="1"/>
+                <rect x="11" y="4" width="1" height="1"/>
+                <rect x="12" y="4" width="1" height="1"/>
+                <rect x="14" y="4" width="1" height="1"/>
+                <rect x="16" y="4" width="1" height="1"/>
+                <rect x="18" y="4" width="1" height="1"/>
+                <rect x="8" y="5" width="1" height="1"/>
+                <rect x="10" y="5" width="1" height="1"/>
+                <rect x="13" y="5" width="1" height="1"/>
+                <rect x="15" y="5" width="1" height="1"/>
+                <rect x="16" y="5" width="1" height="1"/>
+                <rect x="19" y="5" width="1" height="1"/>
+                <rect x="8" y="8" width="1" height="1"/>
+                <rect x="9" y="8" width="1" height="1"/>
+                <rect x="11" y="8" width="1" height="1"/>
+                <rect x="13" y="8" width="1" height="1"/>
+                <rect x="14" y="8" width="1" height="1"/>
+                <rect x="16" y="8" width="1" height="1"/>
+                <rect x="18" y="8" width="1" height="1"/>
+                <rect x="20" y="8" width="1" height="1"/>
+                <rect x="22" y="8" width="1" height="1"/>
+                <rect x="24" y="8" width="1" height="1"/>
+                <rect x="25" y="8" width="1" height="1"/>
+                <rect x="27" y="8" width="1" height="1"/>
+                <rect x="9" y="9" width="1" height="1"/>
+                <rect x="10" y="9" width="1" height="1"/>
+                <rect x="12" y="9" width="1" height="1"/>
+                <rect x="14" y="9" width="1" height="1"/>
+                <rect x="17" y="9" width="1" height="1"/>
+                <rect x="19" y="9" width="1" height="1"/>
+                <rect x="20" y="9" width="1" height="1"/>
+                <rect x="23" y="9" width="1" height="1"/>
+                <rect x="25" y="9" width="1" height="1"/>
+                <rect x="27" y="9" width="1" height="1"/>
+                <rect x="8" y="10" width="1" height="1"/>
+                <rect x="11" y="10" width="1" height="1"/>
+                <rect x="13" y="10" width="1" height="1"/>
+                <rect x="15" y="10" width="1" height="1"/>
+                <rect x="16" y="10" width="1" height="1"/>
+                <rect x="18" y="10" width="1" height="1"/>
+                <rect x="21" y="10" width="1" height="1"/>
+                <rect x="22" y="10" width="1" height="1"/>
+                <rect x="24" y="10" width="1" height="1"/>
+                <rect x="26" y="10" width="1" height="1"/>
+                <rect x="9" y="11" width="1" height="1"/>
+                <rect x="10" y="11" width="1" height="1"/>
+                <rect x="12" y="11" width="1" height="1"/>
+                <rect x="14" y="11" width="1" height="1"/>
+                <rect x="17" y="11" width="1" height="1"/>
+                <rect x="19" y="11" width="1" height="1"/>
+                <rect x="20" y="11" width="1" height="1"/>
+                <rect x="22" y="11" width="1" height="1"/>
+                <rect x="25" y="11" width="1" height="1"/>
+                <rect x="27" y="11" width="1" height="1"/>
+                <rect x="8" y="12" width="1" height="1"/>
+                <rect x="10" y="12" width="1" height="1"/>
+                <rect x="11" y="12" width="1" height="1"/>
+                <rect x="13" y="12" width="1" height="1"/>
+                <rect x="15" y="12" width="1" height="1"/>
+                <rect x="18" y="12" width="1" height="1"/>
+                <rect x="21" y="12" width="1" height="1"/>
+                <rect x="23" y="12" width="1" height="1"/>
+                <rect x="24" y="12" width="1" height="1"/>
+                <rect x="26" y="12" width="1" height="1"/>
+                <rect x="9" y="13" width="1" height="1"/>
+                <rect x="12" y="13" width="1" height="1"/>
+                <rect x="14" y="13" width="1" height="1"/>
+                <rect x="16" y="13" width="1" height="1"/>
+                <rect x="17" y="13" width="1" height="1"/>
+                <rect x="20" y="13" width="1" height="1"/>
+                <rect x="22" y="13" width="1" height="1"/>
+                <rect x="24" y="13" width="1" height="1"/>
+                <rect x="25" y="13" width="1" height="1"/>
+                <rect x="27" y="13" width="1" height="1"/>
+                <rect x="8" y="14" width="1" height="1"/>
+                <rect x="10" y="14" width="1" height="1"/>
+                <rect x="11" y="14" width="1" height="1"/>
+                <rect x="13" y="14" width="1" height="1"/>
+                <rect x="15" y="14" width="1" height="1"/>
+                <rect x="18" y="14" width="1" height="1"/>
+                <rect x="19" y="14" width="1" height="1"/>
+                <rect x="21" y="14" width="1" height="1"/>
+                <rect x="23" y="14" width="1" height="1"/>
+                <rect x="26" y="14" width="1" height="1"/>
+                <rect x="9" y="15" width="1" height="1"/>
+                <rect x="12" y="15" width="1" height="1"/>
+                <rect x="14" y="15" width="1" height="1"/>
+                <rect x="16" y="15" width="1" height="1"/>
+                <rect x="18" y="15" width="1" height="1"/>
+                <rect x="20" y="15" width="1" height="1"/>
+                <rect x="22" y="15" width="1" height="1"/>
+                <rect x="24" y="15" width="1" height="1"/>
+                <rect x="25" y="15" width="1" height="1"/>
+                <rect x="27" y="15" width="1" height="1"/>
+                <rect x="8" y="16" width="1" height="1"/>
+                <rect x="10" y="16" width="1" height="1"/>
+                <rect x="11" y="16" width="1" height="1"/>
+                <rect x="13" y="16" width="1" height="1"/>
+                <rect x="15" y="16" width="1" height="1"/>
+                <rect x="17" y="16" width="1" height="1"/>
+                <rect x="19" y="16" width="1" height="1"/>
+                <rect x="21" y="16" width="1" height="1"/>
+                <rect x="22" y="16" width="1" height="1"/>
+                <rect x="24" y="16" width="1" height="1"/>
+                <rect x="26" y="16" width="1" height="1"/>
+                <rect x="9" y="17" width="1" height="1"/>
+                <rect x="12" y="17" width="1" height="1"/>
+                <rect x="14" y="17" width="1" height="1"/>
+                <rect x="16" y="17" width="1" height="1"/>
+                <rect x="18" y="17" width="1" height="1"/>
+                <rect x="20" y="17" width="1" height="1"/>
+                <rect x="23" y="17" width="1" height="1"/>
+                <rect x="25" y="17" width="1" height="1"/>
+                <rect x="27" y="17" width="1" height="1"/>
+                <rect x="8" y="18" width="1" height="1"/>
+                <rect x="10" y="18" width="1" height="1"/>
+                <rect x="11" y="18" width="1" height="1"/>
+                <rect x="13" y="18" width="1" height="1"/>
+                <rect x="15" y="18" width="1" height="1"/>
+                <rect x="17" y="18" width="1" height="1"/>
+                <rect x="19" y="18" width="1" height="1"/>
+                <rect x="21" y="18" width="1" height="1"/>
+                <rect x="24" y="18" width="1" height="1"/>
+                <rect x="26" y="18" width="1" height="1"/>
+                <rect x="9" y="19" width="1" height="1"/>
+                <rect x="12" y="19" width="1" height="1"/>
+                <rect x="14" y="19" width="1" height="1"/>
+                <rect x="16" y="19" width="1" height="1"/>
+                <rect x="18" y="19" width="1" height="1"/>
+                <rect x="20" y="19" width="1" height="1"/>
+                <rect x="22" y="19" width="1" height="1"/>
+                <rect x="25" y="19" width="1" height="1"/>
+                <rect x="27" y="19" width="1" height="1"/>
+                <rect x="8" y="20" width="1" height="1"/>
+                <rect x="10" y="20" width="1" height="1"/>
+                <rect x="11" y="20" width="1" height="1"/>
+                <rect x="13" y="20" width="1" height="1"/>
+                <rect x="15" y="20" width="1" height="1"/>
+                <rect x="17" y="20" width="1" height="1"/>
+                <rect x="19" y="20" width="1" height="1"/>
+                <rect x="21" y="20" width="1" height="1"/>
+                <rect x="23" y="20" width="1" height="1"/>
+                <rect x="24" y="20" width="1" height="1"/>
+                <rect x="26" y="20" width="1" height="1"/>
+              </g>
+            </svg>
+            <div class="qr-time" id="qrTime">15:30:00</div>
+          </div>
 
-<button class="share">d ticket TOPへ</button>
-</div>
+          <div class="warning">【特定チケット】<br>無断有償譲渡禁止<br>本券は購入者の氏名・<br>連絡先を確認の上販売<br>されています。</div>
+        </div>
 
-<div class="overlay" id="overlay"></div>
+        <div class="name-strip">夏目 敏之</div>
 
-<!-- HEADER -->
-<div class="header">
-<div class="menu-btn" onclick="toggleMenu()">
-<div></div>
-<div></div>
-<div></div>
-</div>
-マイチケット
-</div>
+        <div class="ticket-body">
+          <div class="head">
+            <div>
+              <div class="date"><span class="main">4/4</span>(土)</div>
+              <div class="venue">MUFG STADIUM（国立競技場）</div>
+              <div class="time">開場(予定) 15:30　開始 17:30</div>
+              <div class="sub">docomo presents</div>
+            </div>
+            <div class="logo" aria-hidden="true">
+              <div class="logo-text">THE<br>MUSIC<br>STADIUM<br>2026</div>
+            </div>
+          </div>
 
-<!-- TICKET -->
-<div class="ticket">
+          <div class="title">THE MUSIC STADIUM 2026 organized by ONE OK ROCK</div>
 
-<div class="ticket-top">
+          <div class="meta">
+            <div class="label">席種</div><div class="value">指定席 / 共通</div>
+            <div class="label">座席</div><div class="value">第5ゲート<br>アリーナ H6ブロック 13列 8番</div>
+          </div>
+        </div>
+      </section>
 
-<div class="qr">
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=dticket">
-<div class="qr-time" id="time">--:--:--</div>
-</div>
+      <div class="footer-pill">
+        <span>お客さまご利用端末からの情報の外部送信について</span>
+        <span class="gear">⚙</span>
+      </div>
+    </main>
+  </div>
 
-<div class="warning">
-【特定チケット】<br>
-無断有償譲渡禁止<br>
-本券は購入者の氏名・<br>
-連絡先を確認の上販売<br>
-されています。
-</div>
+  <script>
+    (function () {
+      function pad(n) {
+        return String(n).padStart(2, "0");
+      }
 
-</div>
+      function updateCountdown() {
+        const now = new Date();
+        const target = new Date(now);
+        target.setHours(15, 30, 0, 0);
 
-<div class="body">
-<div>4/4(土)</div>
-<div>MUFG STADIUM</div>
+        let diff = target.getTime() - now.getTime();
+        if (diff < 0) diff = 0;
 
-<div class="title">
-THE MUSIC STADIUM 2026 organized by ONE OK ROCK
-</div>
+        const totalSeconds = Math.floor(diff / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
 
-</div>
+        const el = document.getElementById("qrTime");
+        if (el) {
+          el.textContent = pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
+        }
+      }
 
-</div>
-
-<script>
-/* ===== MENU ===== */
-function toggleMenu(){
-document.getElementById("menu").classList.toggle("open");
-document.getElementById("overlay").classList.toggle("show");
-}
-
-/* ===== COUNTDOWN ===== */
-function updateTime(){
-let now=new Date();
-let target=new Date();
-target.setHours(15,30,0);
-
-let diff=(target-now)/1000;
-if(diff<0) diff=0;
-
-let h=Math.floor(diff/3600);
-let m=Math.floor((diff%3600)/60);
-let s=Math.floor(diff%60);
-
-document.getElementById("time").innerText=
-String(h).padStart(2,"0")+":"+
-String(m).padStart(2,"0")+":"+
-String(s).padStart(2,"0");
-}
-
-setInterval(updateTime,1000);
-updateTime();
-</script>
-
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    })();
+  </script>
 </body>
 </html>
